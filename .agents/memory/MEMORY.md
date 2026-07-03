@@ -1,0 +1,3 @@
+- [Android Build Environment](android-build-env.md) — SDK wipes on container reset; must reinstall before every build
+- [NavStyle Exhaustive When](navstyle-when.md) — UpdatesTab uses exhaustive when on NavStyle enum; every new enum entry must be handled
+- [Preference collectAsState Pattern](preference-collectasstate.md) — Use .changes().collectAsState(initial = pref.get()) not .collectAsState() on raw Preference objects

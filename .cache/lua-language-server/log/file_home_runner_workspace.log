@@ -1,0 +1,154 @@
+[15:08:46.574][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:71]: Lua Lsp startup, root: 	/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server
+[15:08:46.574][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:72]: ROOT:	/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server
+[15:08:46.574][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:73]: LOGPATH:	/home/runner/workspace/.cache/lua-language-server/log
+[15:08:46.574][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:74]: METAPATH:	/home/runner/workspace/.cache/lua-language-server/meta
+[15:08:46.608][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:75]: VERSION:	3.16.1
+[15:08:46.801][info] [#0:script/proto/proto.lua:260]: Listen Mode: stdio
+[15:08:46.808][info] [#0:script/service/service.lua:145]: 
+========= Medical Examination Report =========
+    --------------- Memory ---------------
+        Total: 2.304 MB
+        # 00 : 2.304 MB
+        # 01 : 0.000 MB
+        # 02 : 0.000 MB
+        # 03 : 0.000 MB
+        # 04 : 0.000 MB
+    --------------- Coroutine ---------------
+        Total:     0
+        Running:   0
+        Suspended: 0
+        Normal:    0
+        Dead:      0
+    --------------- Cache ---------------
+        Total: 1
+        Dead:  0
+    ---------------  RPC  ---------------
+        Holdon:   0
+        Waiting:  0
+==============================================
+[15:08:46.917][info] [#0:script/client.lua:657]: Client init	{
+  capabilities = {
+    textDocument = {
+      codeAction = {
+        codeActionLiteralSupport = {
+          codeActionKind = {
+            valueSet = { "", "quickfix", "refactor", "refactor.extract", "refactor.inline", "refactor.rewrite", "source", "source.organizeImports", "source.fixAll" }
+          }
+        },
+        dataSupport = true,
+        dynamicRegistration = true,
+        isPreferredSupport = true,
+        resolveSupport = {
+          properties = { "edit" }
+        }
+      },
+      completion = {
+        completionItem = {
+          commitCharactersSupport = true,
+          documentationFormat = { "markdown", "plaintext" },
+          labelDetailsSupport = true,
+          resolveSupport = {
+            properties = { "detail", "documentation" }
+          },
+          snippetSupport = true
+        },
+        completionList = {
+          itemDefaults = { "commitCharacters" }
+        },
+        contextSupport = true,
+        dynamicRegistration = true
+      },
+      definition = {
+        dynamicRegistration = true,
+        linkSupport = true
+      },
+      documentSymbol = {
+        dynamicRegistration = true,
+        hierarchicalDocumentSymbolSupport = true,
+        symbolKind = {
+          valueSet = { 18, 17, 5, 14, 9, 10, 22, 24, 8, 1, 12, 11, 20, 6, 2, 3, 19, 25, 4, 7, 15, 23, 26, 13 }
+        }
+      },
+      formatting = {
+        dynamicRegistration = true
+      },
+      hover = {
+        contentFormat = { "markdown", "plaintext" },
+        dynamicRegistration = true
+      },
+      implementation = {
+        dynamicRegistration = true
+      },
+      publishDiagnostics = {
+        relatedInformation = true,
+        tagSupport = {
+          valueSet = { 1, 2 }
+        }
+      },
+      references = {
+        dynamicRegistration = true
+      },
+      rename = {
+        dynamicRegistration = true,
+        prepareSupport = true
+      },
+      semanticTokens = {
+        augmentsSyntaxTokens = true,
+        dynamicRegistration = true,
+        formats = { "relative" },
+        multilineTokenSupport = true,
+        overlappingTokenSupport = true,
+        requests = {
+          full = {
+            delta = true
+          },
+          range = true
+        },
+        serverCancelSupport = true,
+        tokenModifiers = { "declaration", "definition", "readonly", "static", "deprecated", "abstract", "async", "modification", "documentation", "defaultLibrary", "attribute", "callable", "constant", "consuming", "controlFlow", "crateRoot", "injected", "intraDocLink", "library", "macro", "mutable", "public", "reference", "trait", "unsafe" },
+        tokenTypes = { "namespace", "type", "class", "enum", "interface", "struct", "typeParameter", "parameter", "variable", "property", "enumMember", "event", "function", "method", "macro", "keyword", "modifier", "comment", "string", "number", "regexp", "operator", "decorator", "angle", "arithmetic", "attribute", "attributeBracket", "bitwise", "boolean", "brace", "bracket", "builtinAttribute", "builtinType", "character", "colon", "comma", "comparison", "constParameter", "derive", "deriveHelper", "dot", "escapeSequence", "invalidEscapeSequence", "formatSpecifier", "generic", "label", "lifetime", "logical", "macroBang", "parenthesis", "punctuation", "selfKeyword", "selfTypeKeyword", "semicolon", "typeAlias", "toolModule", "union", "unresolvedReference", "tomlArrayKey", "tomlTableKey" }
+      },
+      signatureHelp = {
+        dynamicRegistration = true,
+        signatureInformation = {
+          documentationFormat = { "markdown", "plaintext" }
+        }
+      },
+      synchronization = {
+        didSave = true,
+        dynamicRegistration = true
+      },
+      typeDefinition = {
+        dynamicRegistration = true
+      }
+    },
+    workspace = {
+      applyEdit = true,
+      configuration = true,
+      didChangeConfiguration = {
+        dynamicRegistration = true
+      },
+      executeCommand = {
+        dynamicRegistration = true
+      },
+      semanticTokens = {
+        refreshSupport = true
+      },
+      workspaceEdit = {
+        documentChanges = true,
+        resourceOperations = { "create", "delete", "rename" }
+      }
+    }
+  },
+  rootUri = "file:///home/runner/workspace",
+  workspaceFolders = { {
+      name = "file:///home/runner/workspace",
+      uri = "file:///home/runner/workspace"
+    } }
+}
+[15:08:46.918][info] [#0:script/language.lua:137]: VSC language: nil
+[15:08:46.919][info] [#0:script/language.lua:138]: LS  language: en-us
+[15:08:46.919][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///home/runner/workspace
+[15:08:46.919][info] [#0:script/workspace/workspace.lua:42]: Log path: 	/home/runner/workspace/.cache/lua-language-server/log/file_home_runner_workspace.log
+[15:08:46.926][info] [#0:script/workspace/workspace.lua:48]: Workspace create: 	file:///home/runner/workspace
+[15:08:57.526][warn] [#0:script/pub/report.lua:24]: Load proto error:	Disconnected!

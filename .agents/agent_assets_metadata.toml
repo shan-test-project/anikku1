@@ -1,0 +1,44 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "nXfBrJd69tluUV7rZaffG"
+uri = "file://app/build/outputs/apk/debug/Anikku-debug-arm64.tar.gz"
+type = "unspecified"
+title = "Anikku Debug APK (arm64 — for most modern Android phones)"
+
+[[outputs]]
+id = "6mjUaxbVCfg4PdzzH5VIK"
+uri = "file://app/build/outputs/apk/debug/Anikku-arm64-debug.tar.gz"
+type = "unspecified"
+title = "Anikku Debug APK — arm64 (most Android phones)"
+
+[[outputs]]
+id = "muXoLBrgDaAUGDwAlc9S0"
+uri = "file://anikku-debug.tar.gz"
+type = "unspecified"
+title = "Anikku Debug APK (arm64-v8a, 111 MB)"
+
+[[outputs]]
+id = "5chm4wbllzY0ODVcpu0hJ"
+uri = "file://anikku-arm64-debug.apk.gz"
+type = "unspecified"
+title = "Anikku Debug APK — arm64 (most modern phones, ~70MB compressed)"
+
+[[outputs]]
+id = "SJnaiz98G56PX3C4Hc5QT"
+uri = "file://anikku-debug.apk.gz"
+type = "unspecified"
+title = "Anikku Debug APK (arm64, gzipped ~70MB)"
+
+[[outputs]]
+id = "pf7_TrzqeYmX5fLiFKECS"
+uri = "file://anikku-debug-arm64-july1.apk.gz"
+type = "unspecified"
+title = "Anikku Debug APK (arm64, July 1 state, ~70MB gzipped)"
+
+[[outputs]]
+id = "5LbUhcLjfKkN0qnrnz2QR"
+uri = "file://attached_assets/anikku-debug-arm64-july1.apk.gz"
+type = "unspecified"
+title = "Anikku Debug APK (arm64, July 1 state)"

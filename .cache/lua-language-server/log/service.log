@@ -1,0 +1,29 @@
+[15:42:38.120][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:71]: Lua Lsp startup, root: 	/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server
+[15:42:38.120][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:72]: ROOT:	/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server
+[15:42:38.120][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:73]: LOGPATH:	/home/runner/workspace/.cache/lua-language-server/log
+[15:42:38.120][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:74]: METAPATH:	/home/runner/workspace/.cache/lua-language-server/meta
+[15:42:38.120][info] [#0:/nix/store/2fldvs2bv3gn3zr13pp5smz9haslw0ns-lua-language-server-3.16.1/share/lua-language-server/main.lua:75]: VERSION:	3.16.1
+[15:42:38.228][info] [#0:script/proto/proto.lua:260]: Listen Mode: stdio
+[15:42:38.228][info] [#0:script/service/service.lua:145]: 
+========= Medical Examination Report =========
+    --------------- Memory ---------------
+        Total: 2.304 MB
+        # 00 : 2.304 MB
+        # 01 : 0.000 MB
+        # 02 : 0.000 MB
+        # 03 : 0.000 MB
+        # 04 : 0.000 MB
+    --------------- Coroutine ---------------
+        Total:     0
+        Running:   0
+        Suspended: 0
+        Normal:    0
+        Dead:      0
+    --------------- Cache ---------------
+        Total: 1
+        Dead:  0
+    ---------------  RPC  ---------------
+        Holdon:   0
+        Waiting:  0
+==============================================
+[15:42:49.239][warn] [#0:script/pub/report.lua:24]: Load proto error:	Disconnected!

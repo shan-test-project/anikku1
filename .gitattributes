@@ -1,0 +1,26 @@
+* text=auto
+* text eol=lf
+# Windows forced line-endings
+/.idea/* text eol=crlf
+# Gradle wrapper
+*.jar binary
+# Images
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.pyc binary
+*.swp binary
+anikku-debug.tar.gz filter=lfs diff=lfs merge=lfs -text
+anikku-arm64-debug.apk filter=lfs diff=lfs merge=lfs -text
+anikku-arm64-debug.apk.gz filter=lfs diff=lfs merge=lfs -text
+anikku-debug.apk.gz filter=lfs diff=lfs merge=lfs -text
+anikku-debug-arm64-july1.apk.gz filter=lfs diff=lfs merge=lfs -text

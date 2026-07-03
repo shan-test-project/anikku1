@@ -1,0 +1,70 @@
+name: Build Debug APK and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build debug APK
+    runs-on: 'ubuntu-24.04'
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Set up gradle
+        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Get short SHA and run number
+        id: vars
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      - name: Rename APKs
+        run: |
+          set -e
+          mkdir -p release_apks
+          for f in app/build/outputs/apk/debug/*.apk; do
+            base=$(basename "$f")
+            cp "$f" "release_apks/${base%.apk}-${{ steps.vars.outputs.RUN_NUMBER }}.apk"
+          done
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: anikku1-debug-apk-${{ steps.vars.outputs.RUN_NUMBER }}
+          path: release_apks/*.apk
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+        with:
+          tag_name: build-${{ steps.vars.outputs.RUN_NUMBER }}
+          name: Anikku1 Debug Build #${{ steps.vars.outputs.RUN_NUMBER }}
+          body: |
+            Automated debug APK build from commit ${{ steps.vars.outputs.SHORT_SHA }}.
+          files: release_apks/*.apk
+          draft: false
+          prerelease: true
+          token: ${{ secrets.GITHUB_TOKEN }}
