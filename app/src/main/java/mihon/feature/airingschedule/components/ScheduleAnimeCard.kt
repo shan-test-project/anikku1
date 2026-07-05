@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material.icons.outlined.Search
@@ -57,6 +58,7 @@ fun ScheduleAnimeCard(
     favoriteSourceIds: Set<String>,
     pinnedSourceIds: Set<String>,
     autoAddFromPinnedSources: Boolean,
+    isInLibrary: Boolean,
     notifyState: BellNotifyState,
     onSearchClick: (String) -> Unit,
     onAddToLibraryClick: (String) -> Unit,
@@ -271,10 +273,10 @@ fun ScheduleAnimeCard(
                     modifier = Modifier.size(36.dp),
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.BookmarkBorder,
-                        contentDescription = if (autoAddFromPinnedSources) "Add to library via pinned source" else "Add to library",
+                        imageVector = if (isInLibrary) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                        contentDescription = if (isInLibrary) "Already in library" else if (autoAddFromPinnedSources) "Add to library via pinned source" else "Add to library",
                         modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = if (isInLibrary) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
