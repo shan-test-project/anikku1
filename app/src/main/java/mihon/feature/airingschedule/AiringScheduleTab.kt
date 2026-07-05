@@ -159,6 +159,7 @@ data object AiringScheduleTab : Tab {
                             favoriteSourceIds = state.favoriteSourceIds,
                             pinnedSourceIds = state.pinnedSourceIds,
                             autoAddFromPinnedSources = state.autoAddFromPinnedSources,
+                            libraryAnimeTitles = state.libraryAnimeTitles,
                             onSearchClick = { title ->
                                 navigator.push(
                                     GlobalSearchScreen(
@@ -269,6 +270,7 @@ private fun ScheduleDayContent(
     favoriteSourceIds: Set<String>,
     pinnedSourceIds: Set<String>,
     autoAddFromPinnedSources: Boolean,
+    libraryAnimeTitles: Set<String>,
     onSearchClick: (String) -> Unit,
     onAddToLibraryClick: (String) -> Unit,
     notifyOnceMediaIds: Set<String>,
@@ -293,6 +295,12 @@ private fun ScheduleDayContent(
                 mediaKey in notifyOnceMediaIds -> BellNotifyState.ONCE
                 else -> BellNotifyState.NONE
             }
+            val isInLibrary = libraryAnimeTitles.any { libraryTitle ->
+                entry.titleUserPreferred.trim().lowercase() == libraryTitle ||
+                    entry.titleEnglish?.trim()?.lowercase() == libraryTitle ||
+                    entry.titleRomaji?.trim()?.lowercase() == libraryTitle ||
+                    entry.titleNative?.trim()?.lowercase() == libraryTitle
+            }
             ScheduleAnimeCard(
                 entry = entry,
                 titleLanguage = titleLanguage,
@@ -300,6 +308,7 @@ private fun ScheduleDayContent(
                 favoriteSourceIds = favoriteSourceIds,
                 pinnedSourceIds = pinnedSourceIds,
                 autoAddFromPinnedSources = autoAddFromPinnedSources,
+                isInLibrary = isInLibrary,
                 notifyState = notifyState,
                 onSearchClick = onSearchClick,
                 onAddToLibraryClick = onAddToLibraryClick,
