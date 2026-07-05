@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import mihon.feature.airingschedule.components.BellNotifyState
 import mihon.feature.airingschedule.notification.ScheduleNotifications
+import tachiyomi.domain.anime.interactor.GetLibraryAnime
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.time.DayOfWeek
@@ -26,6 +27,7 @@ class AiringScheduleScreenModel : StateScreenModel<AiringScheduleScreenModel.Sta
     private val sourcePreferences: SourcePreferences = Injekt.get()
     private val uploadDelayTracker: UploadDelayTracker = Injekt.get()
     private val application: Application = Injekt.get()
+    private val getLibraryAnime: GetLibraryAnime = Injekt.get()
 
     private var allEntries: List<AiringScheduleEntry> = emptyList()
     private var hasLoaded = false
@@ -33,6 +35,18 @@ class AiringScheduleScreenModel : StateScreenModel<AiringScheduleScreenModel.Sta
     init {
         loadSchedule()
         observePreferences()
+        observeLibrary()
+    }
+
+    private fun observeLibrary() {
+        screenModelScope.launch {
+            getLibraryAnime.subscribe().collectLatest { libraryAnime ->
+                val titles = libraryAnime.map { lib ->
+                    lib.anime.title.trim().lowercase()
+                }.toSet()
+                mutableState.update { it.copy(libraryAnimeTitles = titles) }
+            }
+        }
     }
 
     private fun observePreferences() {
@@ -251,5 +265,6 @@ class AiringScheduleScreenModel : StateScreenModel<AiringScheduleScreenModel.Sta
         val autoAddFromPinnedSources: Boolean = false,
         val notifyOnceMediaIds: Set<String> = emptySet(),
         val notifySeriesMediaIds: Set<String> = emptySet(),
+        val libraryAnimeTitles: Set<String> = emptySet(),
     )
 }
