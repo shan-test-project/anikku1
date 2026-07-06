@@ -1,12 +1,14 @@
 package mihon.feature.airingschedule
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,8 +31,6 @@ class ScheduleDataRefreshWorker(
     private val context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
-
-    private val scheduleJson = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
@@ -55,19 +55,14 @@ class ScheduleDataRefreshWorker(
                 includeAdult = includeAdult,
             )
 
-            val cacheData = ScheduleCacheData(
-                fetchedAt = System.currentTimeMillis(),
-                weekStartEpoch = weekStart.toEpochSecond(),
-                entries = entries.map { it.toCached() },
-            )
-
-            val cacheFile = context.cacheFile()
-            cacheFile.parentFile?.mkdirs()
-            cacheFile.writeText(scheduleJson.encodeToString(ScheduleCacheData.serializer(), cacheData))
+            writeCache(context, weekStart.toEpochSecond(), entries)
 
             schedulePrefs.scheduleLastAutoRefresh().set(System.currentTimeMillis())
             Result.success()
         } catch (_: Exception) {
+            // WorkManager will retry this with the exponential backoff policy configured in
+            // `schedule()` below, so a transient failure here (rate limiting, no network, etc.)
+            // self-heals without any user action.
             Result.retry()
         }
     }
@@ -86,6 +81,11 @@ class ScheduleDataRefreshWorker(
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build(),
                 )
+                // If a refresh attempt fails (e.g. transient network/rate-limit issue), WorkManager
+                // retries with growing delays instead of hammering the API or giving up until the
+                // next full period, so the "one week ends, next week fails to load" scenario
+                // self-heals well before the week is over.
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                 .build()
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(WORK_NAME, ExistingPeriodicWorkPolicy.UPDATE, request)
@@ -102,6 +102,26 @@ class ScheduleDataRefreshWorker(
                 cacheJson.decodeFromString(ScheduleCacheData.serializer(), file.readText())
             } catch (_: Exception) {
                 null
+            }
+        }
+
+        /**
+         * Persists a successfully fetched schedule to disk so it survives app process death and
+         * can be used as a fallback if a later refresh attempt fails. Safe to call regardless of
+         * whether auto-refresh is enabled.
+         */
+        fun writeCache(context: Context, weekStartEpoch: Long, entries: List<AiringScheduleEntry>) {
+            try {
+                val cacheData = ScheduleCacheData(
+                    fetchedAt = System.currentTimeMillis(),
+                    weekStartEpoch = weekStartEpoch,
+                    entries = entries.map { it.toCached() },
+                )
+                val file = context.cacheFile()
+                file.parentFile?.mkdirs()
+                file.writeText(cacheJson.encodeToString(ScheduleCacheData.serializer(), cacheData))
+            } catch (_: Exception) {
+                // Best-effort cache write; failing to persist shouldn't break the current load.
             }
         }
 
