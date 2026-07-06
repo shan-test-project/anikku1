@@ -67,38 +67,47 @@ class AiringScheduleScreenModel : StateScreenModel<AiringScheduleScreenModel.Sta
     fun loadSchedule() {
         screenModelScope.launch {
             mutableState.update { it.copy(isLoading = true, error = null) }
-            try {
-                val zone = ZoneId.systemDefault()
-                val now = ZonedDateTime.now(zone)
-                val weekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                    .toLocalDate().atStartOfDay(zone)
-                val weekEnd = weekStart.plusDays(7).minusSeconds(1)
+            val zone = ZoneId.systemDefault()
+            val now = ZonedDateTime.now(zone)
+            val weekStart = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .toLocalDate().atStartOfDay(zone)
+            val weekEnd = weekStart.plusDays(7).minusSeconds(1)
+            val currentWeekStart = weekStart.toEpochSecond()
 
+            try {
                 val autoRefreshEnabled = schedulePrefs.scheduleAutoRefreshEnabled().get()
-                val entries: List<AiringScheduleEntry> = if (autoRefreshEnabled) {
-                    val frequency = schedulePrefs.scheduleAutoRefreshFrequency().get()
-                    val cache = ScheduleDataRefreshWorker.readCache(application)
-                    val currentWeekStart = weekStart.toEpochSecond()
-                    if (cache != null &&
-                        cache.weekStartEpoch == currentWeekStart &&
-                        ScheduleDataRefreshWorker.isCacheFresh(cache, frequency)
-                    ) {
-                        cache.entries.map { it.toEntry() }
-                    } else {
-                        val includeAdult = schedulePrefs.showAdultContent().get()
-                        repository.getWeeklySchedule(
+                val cache = ScheduleDataRefreshWorker.readCache(application)
+                val entries: List<AiringScheduleEntry> = if (autoRefreshEnabled &&
+                    cache != null &&
+                    cache.weekStartEpoch == currentWeekStart &&
+                    ScheduleDataRefreshWorker.isCacheFresh(cache, schedulePrefs.scheduleAutoRefreshFrequency().get())
+                ) {
+                    cache.entries.map { it.toEntry() }
+                } else {
+                    val includeAdult = schedulePrefs.showAdultContent().get()
+                    try {
+                        val fetched = repository.getWeeklySchedule(
                             weekStart.toEpochSecond(),
                             weekEnd.toEpochSecond(),
                             includeAdult = includeAdult,
                         )
+                        // Persist every successful live fetch, regardless of the auto-refresh
+                        // setting, so a subsequent failure (network hiccup, app process death,
+                        // etc.) always has fresh data to fall back on for this week.
+                        ScheduleDataRefreshWorker.writeCache(application, currentWeekStart, fetched)
+                        fetched
+                    } catch (fetchError: Exception) {
+                        // The live fetch failed. Rather than showing a hard error and leaving the
+                        // schedule blank, fall back to whatever we have cached for this exact
+                        // week - even if it's stale - so the user still sees a schedule. Only
+                        // surface the error if there's truly nothing to show.
+                        val fallback = cache?.takeIf { it.weekStartEpoch == currentWeekStart }
+                        if (fallback != null) {
+                            fallback.entries.map { it.toEntry() }
+                        } else {
+                            throw fetchError
+                        }
                     }
-                } else {
-                    val includeAdult = schedulePrefs.showAdultContent().get()
-                    repository.getWeeklySchedule(
-                        weekStart.toEpochSecond(),
-                        weekEnd.toEpochSecond(),
-                        includeAdult = includeAdult,
-                    )
                 }
 
                 allEntries = entries
